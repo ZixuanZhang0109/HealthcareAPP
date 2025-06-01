@@ -1,6 +1,6 @@
 # --- Cell ---
 # app_combined.py
-
+import os
 import streamlit as st
 import pandas as pd
 from datetime import date
@@ -10,21 +10,19 @@ from sqlalchemy.orm import sessionmaker
 # =============================================================================
 # 1. Database connection info (adjust as needed)
 # =============================================================================
-DB_USER     = "postgres"
-DB_PASSWORD = "root"
-DB_HOST     = "localhost"
-DB_PORT     = "5432"
-DB_NAME     = "Healthcare"
+DB_USER     = st.secrets["DB_USER"]
+DB_PASSWORD = st.secrets["DB_PASSWORD"]
+DB_HOST     = st.secrets["DB_HOST"]
+DB_PORT     = st.secrets.get("DB_PORT", "5432")
+DB_NAME     = st.secrets["DB_NAME"]
 
 DATABASE_URL = (
     f"postgresql+psycopg2://"
     f"{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 )
 
-# Create the engine and session factory
 engine = create_engine(DATABASE_URL, echo=False)
 SessionLocal = sessionmaker(bind=engine)
-
 # =============================================================================
 # 2. Reflect schemas into MetaData objects
 # =============================================================================
